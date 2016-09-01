@@ -1,29 +1,37 @@
-int numberOfBodies = 5;
-float gravity = 9.8;
+int numberOfBodies = 500;
+float colorChanger = 1;
 Celestial_Body mama;
 Celestial_Body[] allBodies = new Celestial_Body[numberOfBodies];
+float orbitDisplacement = 25;
 
 void setup() {
-  size(1000, 800);
-  background(125);
+  size(1280, 750);
+  background(75);
   initBodies();
+  ellipseMode(CENTER);
+  mama.display();
 }
 
 void draw() {
-  background(125);
-  mama.display();
+  //  background(125);
   for (int i = 0; i < numberOfBodies; i ++) {
-    allBodies[i].display();    
+    allBodies[i].display(); 
+    //print("Body " + i + " "); 
+    allBodies[i].move();
+  }
+  if ((frameCount % 200) == 0) {
+    colorChanger = colorChanger * -1;
   }
 }
 
 void initBodies() {
-  mama = new Celestial_Body(2000, 100, color(180, 250, 250, 175));
+  mama = new Celestial_Body(2000, 100, color(180, 250, 250, 105));
   for (int i = 0; i < numberOfBodies; i++) { 
     allBodies[i] = new Celestial_Body();
-    float angle = random(TWO_PI);
+    float angle = (i * HALF_PI) + (HALF_PI / 2); // random(TWO_PI);
     float mass = random(100) + 1;
-    float radius = random(5) + 5;
+    float radius = 0;
+    allBodies[i].startAngle = angle;
     allBodies[i].x = mama.x + (cos(angle) * mama.radius);
     allBodies[i].y = mama.y + (sin(angle) * mama.radius);
     allBodies[i].mass = mass;
@@ -34,3 +42,4 @@ void initBodies() {
     allBodies[i].bodyColor = color(random(200) + 25, random(200) + 25, random(200) + 25, random(200) + 75);
   }
 }
+
