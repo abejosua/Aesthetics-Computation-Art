@@ -1,11 +1,11 @@
-int numberOfBodies = 1500;
-float colorChanger = 1.2;
+int numberOfBodies = 550;
+float colorChanger = 1;
 Celestial_Body mama;
 Celestial_Body[] allBodies = new Celestial_Body[numberOfBodies];
-float orbitDisplacement = -7;
+float orbitDisplacement = -17;
 
 void setup() {
-  size(1280, 750);
+  size(1280, 375);
   background(75);
   initBodies();
   ellipseMode(CENTER);
