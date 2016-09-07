@@ -1,23 +1,24 @@
-int gridSpacing = 50;
+int gridSpacing = 75;
 int zDepth = 1500;
 int horizonLineCount = int (zDepth / gridSpacing);
 int gridPointCount;
 float[][] gridPoints;
-float refX = 0.1;
+float refX = 0.0;
+float refY = 0.0;
 
 void setup () {
   background(125);
   size(1000, 1000, P3D);
-  gridPointCount = int (width / gridSpacing);
+  gridPointCount = int ((2 * width) / gridSpacing);
   gridPoints = new float[horizonLineCount][gridPointCount];
   noiseDetail(8, 0.5);
   initGridPoints();
-  frameRate(15);
+  frameRate(10);
 }
 
 void draw () {
   background(125);
-  displayWorldBox();
+//  displayWorldBox();
   line(0, height/2, 0, width, height/2, 0);
   computeNextHorizon();
   displayTerrain();
@@ -33,42 +34,34 @@ void initGridPoints() {
 
 void computeNextHorizon() {
   float noiseVal;
-  for (int i = (horizonLineCount - 1); i > 0; i --) {
+  for (int i = horizonLineCount - 1; i > 0; i --) {
     for (int j = 0; j < gridPointCount; j ++) {
       gridPoints[i][j] = gridPoints[i - 1][j];
     }
   }
-  for (int i = 0; i < gridPointCount; i ++) {
-    noiseVal = noise(refX);
-    gridPoints[0][i] = map(noiseVal, 0, 1, (height / 2), (height / 2) + (height / 8));
-    refX = refX + 0.01;
+
+  if ((refY * 100) % horizonLineCount == 0) {
+    refY = 0;
+  } else {
+    refY = refY + 0.1;
+  }
+  for (int j = 0; j < gridPointCount; j ++) {
+    noiseVal = noise(refX, refY);
+    gridPoints[0][j] = map(noiseVal, 0, 1, (height / 2), (height / 2) + (height / 7));
+    refX = refX + 0.1;
   }
 }
 
 void displayTerrain() {
-  stroke(0, 0, 255);
-  //  strokeWeight(2);
-  /*
-  for (int i = 0; i < horizonLineCount; i ++) {
-   for (int j = 0; j < (gridPointCount - 1); j ++) {
-   line (j * gridSpacing, gridPoints[i][j], (horizonLineCount - 1 - i) * gridSpacing * -1, (j + 1) * gridSpacing, gridPoints[i][j + 1], (horizonLineCount - 1 - i) * gridSpacing * -1);
-   //    point(j * gridSpacing, gridPoints[i][j], i * gridSpacing * -1);
-   }
-   }
-   */
-  for (int i = horizonLineCount - 2; i > -1; i --) {
+  stroke(255);
+  for (int i = 0; i < horizonLineCount - 1; i ++) {
+    for (int j = 0; j < gridPointCount - 1; j ++) {
+      line(j * gridSpacing - (width/2), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), (j + 1) * gridSpacing - (width/2), gridPoints[i][j + 1], (-1 * zDepth) - (i * gridSpacing * -1));
+    }
     for (int j = 0; j < gridPointCount; j ++) {
-      line(j * gridSpacing, gridPoints[i][j], (i * gridSpacing * -1), j * gridSpacing, gridPoints[i + 1][j], ((i + 1) * gridSpacing * -1));
+      line(j * gridSpacing - (width/2), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), j * gridSpacing - (width/2), gridPoints[i+1][j], (-1 * zDepth) - ((i + 1) * gridSpacing * -1));
     }
   }
-  /*
-    for (int i = 0; i < (horizonLineCount - 1) ; i ++) {
-   for (int j = 0; j < gridPointCount; j ++) {
-   line (j * gridSpacing, gridPoints[i][j], i * gridSpacing * -1, j * gridSpacing, gridPoints[i + 1][j], ((i) + 1) * gridSpacing * -1);
-   //    point(j * gridSpacing, gridPoints[i][j], i * gridSpacing * -1);
-   }
-   }
-   */
 }
 
 void displayWorldBox() { // draw worldBox();  
