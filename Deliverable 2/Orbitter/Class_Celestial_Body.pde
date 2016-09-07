@@ -29,7 +29,7 @@ Celestial_Body() {
   this.orbitW = random (width * 2); //random(((width) - (2 * mama.radius) - 50) / 2) + (mama.radius * 2);
   this.orbitH = random(height * 2); //random(((height) - (2 * mama.radius) - 50) / 2) + (mama.radius * 2);
   this.startAngle = 0;
-  this.radiusChangeFactor = 0.05;
+  this.radiusChangeFactor = 0.03;
 }  
 
 Celestial_Body(float m, float r, color c) {
@@ -46,7 +46,7 @@ Celestial_Body(float m, float r, color c) {
   this.orbitW = 0;
   this.orbitH = 0;
   this.startAngle = 0;
-  this.radiusChangeFactor = 0.05;
+  this.radiusChangeFactor = 500;
 }
 /*
 Celestial_Body(float x, float y, float m, float r, float lT, float lA, color c) {
@@ -101,9 +101,9 @@ void orbit() {
     this.radius = this.radius + radiusChangeFactor;
   this.orbitH = this.orbitH + (radiusChangeFactor * orbitDisplacement);
   this.orbitW = this.orbitW + (radiusChangeFactor * orbitDisplacement);
-if ((this.radius <= 0) || (this.radius >= 5)) {
+if ((this.radius <= 0) || (this.radius >= 3)) {
   this.radiusChangeFactor = this.radiusChangeFactor * -1;
-  this.bodyColor = color(red(this.bodyColor) + colorChanger * (random(7)), green(this.bodyColor) + colorChanger * (random(7)), blue(this.bodyColor) + colorChanger * random(7), random(75)); 
+  this.bodyColor = color(red(this.bodyColor) + colorChanger * (random(17)), green(this.bodyColor) + colorChanger * (random(7)), blue(this.bodyColor) + colorChanger * random(7), random(75)); 
 
 }
 }

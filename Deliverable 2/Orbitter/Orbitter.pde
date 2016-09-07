@@ -1,8 +1,8 @@
-int numberOfBodies = 500;
-float colorChanger = 1;
+int numberOfBodies = 1500;
+float colorChanger = 1.2;
 Celestial_Body mama;
 Celestial_Body[] allBodies = new Celestial_Body[numberOfBodies];
-float orbitDisplacement = 25;
+float orbitDisplacement = -7;
 
 void setup() {
   size(1280, 750);
