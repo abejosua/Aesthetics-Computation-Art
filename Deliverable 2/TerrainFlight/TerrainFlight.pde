@@ -1,6 +1,7 @@
 int gridSpacing = 75;
-int zDepth = 1500;
-int horizonLineCount = int (zDepth / gridSpacing);
+int zDepth = 2500;
+int rollSpacing = 50;
+int horizonLineCount = int (zDepth / rollSpacing);
 int gridPointCount;
 float[][] gridPoints;
 float refX = 0.0;
@@ -9,7 +10,7 @@ float refY = 0.0;
 void setup () {
   background(125);
   size(1000, 1000, P3D);
-  gridPointCount = int ((2 * width) / gridSpacing);
+  gridPointCount = int ((4 * width) / gridSpacing);
   gridPoints = new float[horizonLineCount][gridPointCount];
   noiseDetail(8, 0.5);
   initGridPoints();
@@ -17,9 +18,9 @@ void setup () {
 }
 
 void draw () {
-  background(125);
+  background(0, 100, 100, 125);
 //  displayWorldBox();
-  line(0, height/2, 0, width, height/2, 0);
+//  line(0, height/2, 0, width, height/2, 0);
   computeNextHorizon();
   displayTerrain();
 }
@@ -47,19 +48,20 @@ void computeNextHorizon() {
   }
   for (int j = 0; j < gridPointCount; j ++) {
     noiseVal = noise(refX, refY);
-    gridPoints[0][j] = map(noiseVal, 0, 1, (height / 2), (height / 2) + (height / 7));
+    gridPoints[0][j] = map(noiseVal, 0, 1, (height / 1.5), height); //(height / 2) + (height / 7));
+//    gridPoints[0][j] = gridPoints[0][j] + 
     refX = refX + 0.1;
   }
 }
 
 void displayTerrain() {
-  stroke(255);
   for (int i = 0; i < horizonLineCount - 1; i ++) {
-    for (int j = 0; j < gridPointCount - 1; j ++) {
-      line(j * gridSpacing - (width/2), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), (j + 1) * gridSpacing - (width/2), gridPoints[i][j + 1], (-1 * zDepth) - (i * gridSpacing * -1));
+  stroke(0, 0, 255, i * (50 / horizonLineCount) + 50);
+    for (int j = 0; j < gridPointCount - 1; j ++) {// draw horizontals
+      line(j * gridSpacing - (width*1.5), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), (j + 1) * gridSpacing - (width*1.5), gridPoints[i][j + 1], (-1 * zDepth) - (i * gridSpacing * -1));
     }
-    for (int j = 0; j < gridPointCount; j ++) {
-      line(j * gridSpacing - (width/2), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), j * gridSpacing - (width/2), gridPoints[i+1][j], (-1 * zDepth) - ((i + 1) * gridSpacing * -1));
+    for (int j = 0; j < gridPointCount; j ++) {// connect horizons backwards
+      line(j * gridSpacing - (width*1.5), gridPoints[i][j], (-1 * zDepth) - (i * gridSpacing * -1), j * gridSpacing - (width*1.5), gridPoints[i+1][j], (-1 * zDepth) - ((i + 1) * gridSpacing * -1));
     }
   }
 }
