@@ -7,6 +7,8 @@ float[][] gridPoints;
 float refX = 0.0;
 float refY = 0.0;
 int throttle = 20;
+int octaves = 8;
+float step = 0.9;
 
 void setup () {
   //  strokeWeight(2);
@@ -14,12 +16,14 @@ void setup () {
   size(1280, 350, P3D);
   gridPointCount = int ((4 * width) / gridSpacing);
   gridPoints = new float[horizonLineCount][gridPointCount];
-  noiseDetail(8, 0.5);
+  noiseDetail(8, 0.9);
   initGridPoints();
   frameRate(throttle);
 }
 
 void draw () {
+    noiseDetail(octaves, step);
+
   background(75, 25, 200, 125);
   //  displayWorldBox();
   //  line(0, height/2, 0, width, height/2, 0);
@@ -27,6 +31,8 @@ void draw () {
   displayTerrain();
   //  displayAircraft();
   frameRate(throttle);
+  text("Perlin Noise.....  Octaves is: +/- 1 = UP and DOWN      Fall off is: +/- 0.05 = LEFT and RIGHT", 25, 25);
+  text("                   " + octaves+ "                                                        "+step, 50, 50);
 }
 
 void keyPressed () {
@@ -42,6 +48,31 @@ void keyPressed () {
       throttle = 15;
     }
   }
+    if (keyCode == UP) {
+    octaves = octaves + 1;
+    if (octaves > 15) {
+      octaves = 15;
+    }
+  }
+  if (keyCode == DOWN) {
+    octaves = octaves - 1;
+    if (octaves < 2) {
+      octaves = 2;
+    }
+  }
+    if (keyCode == RIGHT) {
+    step = step + .05;
+    if (step > 1.5) {
+      step = 1.5;
+    }
+  }
+  if (keyCode == LEFT) {
+    step = step - .05;
+    if (step < .1) {
+      step = .1;
+    }
+  }
+
 }
 
 void initGridPoints() {
