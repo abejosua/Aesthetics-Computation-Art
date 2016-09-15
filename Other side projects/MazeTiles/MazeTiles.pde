@@ -1,23 +1,27 @@
-float tileSize = 10;
+import processing.pdf.*;
+boolean snapShot = false;
+int printCount = 1;
+
 int tileCountX;// = 70;
 int tileCountY;// = 70;
-float tileW = 25;
-float tileH = 25;
+float tileW = 15;
+float tileH = 15;
 float numberOfTiles;
-color tileBGColor = color(45, 125, 200, 75);
-color tileMarkColor = color(100, 250, 250, 50);
+color tileBGColor = color(255);
+color tileMarkColor = color(0);
 Tile allTiles[][]; // = new Tile[int(tileCountY)][int(tileCountX)];
 int strokeFluct = 1;
 int strokeDir = -1;
 int s = 1;
 
 void setup() {
-  size(1200, 750);
+  size(480, 480);
   tileCountX = int(width / tileW);
   tileCountY = int(height / tileH);  
   allTiles = new Tile[int(tileCountX)][int(tileCountY)];
   numberOfTiles = tileCountY * tileCountX;
   initTiles();
+//  noLoop();
 }
 
 void draw() {
@@ -29,6 +33,12 @@ void draw() {
 }
 */
   
+    if (snapShot) {
+    // Note that #### will be replaced with the frame number. Fancy!
+    beginRecord(PDF, "print-"+printCount+".pdf");
+   printCount = printCount + 1; 
+  }
+  
   background(125);
   for (int i = 0; i < tileCountX; i ++) {
     for (int j = 0; j < tileCountY; j ++) {
@@ -38,6 +48,14 @@ void draw() {
   //  allTiles[5][10].BGC = color(0, 0, 125);
   //  allTiles[5][10].display();
   //  for (int i = 0; i < tileCountX; i ++) {allTiles[0][i].type = 6; allTiles[0][i].display();}
+  
+    if (snapShot) {
+    endRecord();
+  snapShot = false;
+  }
+
+  
+  
 }
 
 void keyPressed() {
@@ -48,6 +66,12 @@ void keyPressed() {
   if (keyCode == DOWN) {
   s = s - 1;
   if (s < 1) {s = 1;}
+  }
+  if ((key == 'i') || (key == 'I')) {
+    initTiles();
+  }
+  if ((key == 's') || (key == 'S')) {
+    snapShot = true;
   }
 }
 

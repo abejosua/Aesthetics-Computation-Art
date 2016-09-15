@@ -37,7 +37,7 @@ class Tile {
     fill(this.BGC);
     rect(this.x, this.y, this.w, this.h);
     stroke(this.markColor);
-    strokeWeight(int(random(s)) + 1);
+    strokeWeight(int(random(s)) + 3);
     noFill();
     switch (this.type) {
     case 0: 
