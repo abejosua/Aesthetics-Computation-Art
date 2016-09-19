@@ -1,4 +1,6 @@
-int numberOfBones = 2; 
+//  In the checkPositions() function, thanks to Keith Peters for Law Of Cosines Approach to bones: http://flylib.com/books/en/4.261.1.96/1/
+
+int numberOfBones = 3; 
 int numberOfFeathers = 5;
 color boneColor = color(150);
 color jointColor = color(75);
@@ -9,9 +11,7 @@ float reach = 0;
 float jointDiam = 15;
 float xOrigin = 450;
 float yOrigin = 100;
-float boneLengths[] = {
-  175, 100
-};
+float boneLengths[] = {75, 150, 25};
 
 void setup () {
   size(800, 500);
@@ -25,14 +25,12 @@ void draw () {
   stroke(jointColor);
   strokeWeight(1);
   ellipse(anchorPoint.x, anchorPoint.y, 5, 5);
+  checkPositions();
   for (int i = 0; i < numberOfBones; i ++) {
     allBones[i].display();
-    allBones[i].computeParameters();
   }
-  //  showPositions();
   mirrorImage();
 }
-
 
 void mirrorImage() {  
   loadPixels();
@@ -61,61 +59,37 @@ void initBones() {
   }
 }
 
-void mouseDragged() {
-  PVector newPosit;
-  float newAngle = 0;
-  float newAngle2 = 0;
+void checkPositions() {
 
-  //  for (int i = numberOfBones - 1; i > 0; i --) { 
-  //    newPosit = new PVector(mouseX - allBones[i - 1].near.x, mouseY - allBones[i - 1].near.y);    
+  int upArm = int(allBones[0].boneLength);
+  int lowArm = int(allBones[1].boneLength);
+int hand = int(allBones[2].boneLength);
 
-
-  newPosit = new PVector(mouseX - allBones[1].near.x, mouseY - allBones[1].near.y);    
-  newAngle = atan2(newPosit.y, newPosit.x);
-//  print(newAngle + "    ", 100, 100);
-  allBones[1].far = new PVector((allBones[1].boneLength*(cos(newAngle)))+(allBones[1].near.x), 
-  (allBones[1].boneLength*(sin(newAngle)))+(allBones[1].near.y));
-
+  PVector newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);
+//PVector newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);
+//PVector newPosit2 = new PVector(allBones[0].near.x - allBones[0].far.x, allBones[0].near.y - allBones[0].far);
+  float totalDistance = sqrt(newPosit.x*newPosit.x+newPosit.y*newPosit.y);
+//float totalDistance2 = sqrt()
+  float hypot = min(totalDistance, int(allBones[0].boneLength)+int(allBones[1].boneLength));
+//float hypot2 = min();
+  float ha = acos((int(allBones[0].boneLength)*int(allBones[0].boneLength)-int(allBones[1].boneLength)*int(allBones[1].boneLength)-hypot*hypot)/
+                 (-2*int(allBones[1].boneLength)*hypot));
+//float ha2=acos();
+  float ea = acos((hypot*hypot-int(allBones[0].boneLength)*int(allBones[0].boneLength)-int(allBones[1].boneLength)*int(allBones[1].boneLength))/
+                 (-2*int(allBones[1].boneLength)*int(allBones[0].boneLength)));
+//float ea2=acos();
+  float newAngle = atan2(int(newPosit.y), int(newPosit.x));
+//float newAngle2 = atan2();
+  float bigAngle = newAngle + ha + PI + ea;
+//float bigAngle2 = ;
+  allBones[0].far.x = int((cos(bigAngle) * lowArm)) + allBones[0].near.x;
+  allBones[0].far.y = int((sin(bigAngle) * lowArm)) + allBones[0].near.y;
   allBones[1].near = allBones[0].far;
-
-  newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);    
-  newAngle2 =  atan2(newPosit.y, newPosit.x);
-//  println(newAngle2, 100, 150);
-  allBones[0].far = new PVector((allBones[0].boneLength*(cos(newAngle2)))+(allBones[0].near.x), 
-  (allBones[0].boneLength*(sin(newAngle2)))+(allBones[0].near.y));
-
-  allBones[1].near = allBones[0].far;
- 
-  //////////-------------------
-    newPosit = new PVector(mouseX - allBones[1].near.x, mouseY - allBones[1].near.y);    
-  newAngle = atan2(newPosit.y, newPosit.x);
-//  print(newAngle + "    ", 100, 100);
-  allBones[1].far = new PVector((allBones[1].boneLength*(cos(newAngle)))+(allBones[1].near.x), 
-  (allBones[1].boneLength*(sin(newAngle)))+(allBones[1].near.y));
-
-  allBones[1].near = allBones[0].far;
-
-  newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);    
-  newAngle2 =  atan2(newPosit.y, newPosit.x);
-//  println(newAngle2, 100, 150);
-  allBones[0].far = new PVector((allBones[0].boneLength*(cos(newAngle2)))+(allBones[0].near.x), 
-  (allBones[0].boneLength*(sin(newAngle2)))+(allBones[0].near.y));
-
-  allBones[1].near = allBones[0].far;
-
+  allBones[1].far.x = int((cos(newAngle+ha) * upArm)) + allBones[0].far.x;
+  allBones[1].far.y = int((sin(newAngle+ha) * upArm)) + allBones[0].far.y;
+//allBones[2].near = ;
+//allBones[2].far.x = ;
+//allBones[2].far.y = ;
 }
 
-void showPositions() {
-  fill(125, 0, 0);
-
-  text("Position end joint with mouse.", (allBones[numberOfBones - 1].far.x + 20), (allBones[numberOfBones - 1].far.y + 15));
-  for (int i = 0; i < numberOfBones; i ++ ) {
-    fill(i * 50, i * 75, 150);
-    if (i == 0) {
-      text("Anchor point", (allBones[i].near.x + 30), (allBones[i].near.y + 30));
-    }
-    text("Bone "+(i+1)+" near - (" + allBones[i].near.x + ", " + allBones[i].near.y + ")", (allBones[i].near.x + 20), (allBones[i].near.y + 15));
-    text("Bone "+(i+1)+" far  - (" + allBones[i].far.x + ", " + allBones[i].far.y + ")", (allBones[i].far.x + 20), (allBones[i].far.y - 10));
-  }
-}
 

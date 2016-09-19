@@ -32,10 +32,6 @@ void display (){
    ellipse(far.x, far.y, jointDiam, jointDiam);
 }
 
-void computeParameters() {
-  this.xFactor = this.near.x - this.far.x;
-  this.yFactor = this.near.y - this.far.y;
-}
 void addFeathers(int numberOfFeathers) {
   PVector newPosit;
   PVector frontPoint;
