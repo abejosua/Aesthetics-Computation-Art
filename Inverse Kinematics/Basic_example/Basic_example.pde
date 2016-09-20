@@ -7,18 +7,18 @@ color jointColor = color(255);
 float stdBoneLength = 75;
 Bone allBones[] = new Bone[numberOfBones];
 PVector anchorPoint, h;
-PVector m1[] = new PVector[2];
-PVector m2[] = new PVector[2];
-PVector m3[] = new PVector[2]; 
-PVector wt1[] = new PVector[2];
-PVector wt2[] = new PVector[2];
-PVector b1[] = new PVector[2];
-PVector b2[] = new PVector[2];
-PVector b3[] = new PVector[2];
-PVector b4[] = new PVector[2];
-PVector ctr[] = new PVector[2];
-PVector t1[] = new PVector[2];
-PVector t2[] = new PVector[2];
+PVector m1[] = new PVector[3];
+PVector m2[] = new PVector[3];
+PVector m3[] = new PVector[3]; 
+PVector wt1[] = new PVector[3];
+PVector wt2[] = new PVector[3];
+PVector b1[] = new PVector[3];
+PVector b2[] = new PVector[3];
+PVector b3[] = new PVector[3];
+PVector b4[] = new PVector[3];
+PVector ctr[] = new PVector[3];
+PVector t1[] = new PVector[3];
+PVector t2[] = new PVector[3];
 float reach = 0;
 float jointDiam = 10;
 float boneLengths[] = {100, 175};
@@ -46,6 +46,7 @@ void draw () {
   spreadAngle = degrees(atan2(int(100-allBones[1].far.y), int(600-allBones[1].far.x)))+180;
   if (spreadAngle > 180) {spreadAngle = 0;}
   if ((spreadAngle < 180) && (spreadAngle > 90)) {spreadAngle = 90;}
+  spreadAngle = map(spreadAngle, 0, 90, 90, 0);
   text(spreadAngle, 900, 650);
   text(mouseX+"  "+mouseY, 900,600);
 }
@@ -61,19 +62,21 @@ void mirrorImage() {
 }
 
 void drawKeyPoints() {
-  fill(125);
-  ellipse(m1[0].x, m1[0].y, 10, 10);
-  ellipse(m2[0].x, m2[0].y, 10, 10);
-  ellipse(m3[0].x, m3[0].y, 10, 10);
-  ellipse(wt1[0].x, wt1[0].y, 10, 10);
-  ellipse(wt2[0].x, wt2[0].y, 10, 10);
-  ellipse(b1[0].x, b1[0].y, 10, 10);
-  ellipse(b2[0].x, b2[0].y, 10, 10);
-  ellipse(b3[0].x, b3[0].y, 10, 10);
-  ellipse(b4[0].x, b4[0].y, 10, 10);
-  ellipse(ctr[0].x, ctr[0].y, 10, 10);
-  ellipse(t1[0].x, t1[0].y, 10, 10);
-  ellipse(t2[0].x, t2[0].y, 10, 10);
+
+fill(125);
+  ellipse(m1[2].x, m1[2].y, 10, 10);
+  ellipse(m2[2].x, m2[2].y, 10, 10);
+  ellipse(m3[2].x, m3[2].y, 10, 10);
+  ellipse(wt1[2].x, wt1[2].y, 10, 10);
+  ellipse(wt2[2].x, wt2[2].y, 10, 10);
+  ellipse(b1[2].x, b1[2].y, 10, 10);
+  ellipse(b2[2].x, b2[2].y, 10, 10);
+  ellipse(b3[2].x, b3[2].y, 10, 10);
+  ellipse(b4[2].x, b4[2].y, 10, 10);
+  ellipse(ctr[2].x, ctr[2].y, 10, 10);
+  ellipse(t1[2].x, t1[2].y, 10, 10);
+  ellipse(t2[2].x, t2[2].y, 10, 10);
+/*
   fill(125, 0, 0);
   ellipse(m1[1].x, m1[1].y, 3, 3);
   ellipse(m2[1].x, m2[1].y, 3, 3);
@@ -87,37 +90,74 @@ void drawKeyPoints() {
   ellipse(ctr[1].x, ctr[1].y, 3, 3);
   ellipse(t1[1].x, t1[1].y, 3, 3);
   ellipse(t2[1].x, t2[1].y, 3, 3);
+  */
+  line(m1[0].x, m1[0].y, m1[1].x, m1[1].y);
+  line(m2[0].x, m2[0].y, m2[1].x, m2[1].y);
+  line(m3[0].x, m3[0].y, m3[1].x, m3[1].y);
+  line(wt1[0].x, wt1[0].y, wt1[1].x, wt1[1].y);
+  line(wt2[0].x, wt2[0].y, wt2[1].x, wt2[1].y);
+  line(b1[0].x, b1[0].y, b1[1].x, b1[1].y);
+  line(b2[0].x, b2[0].y, b2[1].x, b2[1].y);
+  line(b3[0].x, b3[0].y, b3[1].x, b3[1].y);
+  line(b4[0].x, b4[0].y, b4[1].x, b4[1].y);
+  line(ctr[0].x, ctr[0].y, ctr[1].x, ctr[1].y);
+  line(t1[0].x, t1[0].y, t1[1].x, t1[1].y);
+  line(t2[0].x, t2[0].y, t2[1].x, t2[1].y);
 }
 
 void resetPoints() {
+  m1[2] = new PVector(.0111*spreadAngle*(m1[1].x-m1[0].x)+m1[0].x, .0111*spreadAngle*(m1[1].y-m1[0].y)+m1[0].y);
+  m2[2] = new PVector(.0111*spreadAngle*(m2[1].x-m2[0].x)+m2[0].x, .0111*spreadAngle*(m2[1].y-m2[0].y)+m2[0].y);
+  m3[2] = new PVector(.0111*spreadAngle*(m3[1].x-m3[0].x)+m3[0].x, .0111*spreadAngle*(m3[1].y-m3[0].y)+m3[0].y);
+  wt1[2] = new PVector(.0111*spreadAngle*(wt1[1].x-wt1[0].x)+wt1[0].x, .0111*spreadAngle*(wt1[1].y-wt1[0].y)+wt1[0].y);
+  wt2[2] = new PVector(.0111*spreadAngle*(wt2[1].x-wt2[0].x)+wt2[0].x, .0111*spreadAngle*(wt2[1].y-wt2[0].y)+wt2[0].y);
+  b1[2] = new PVector(.0111*spreadAngle*(b1[1].x-b1[0].x)+b1[0].x, .0111*spreadAngle*(b1[1].y-b1[0].y)+b1[0].y);
+  b2[2] = new PVector(.0111*spreadAngle*(b2[1].x-b2[0].x)+b2[0].x, .0111*spreadAngle*(b2[1].y-b2[0].y)+b2[0].y);
+  b3[2] = new PVector(.0111*spreadAngle*(b3[1].x-b3[0].x)+b3[0].x, .0111*spreadAngle*(b3[1].y-b3[0].y)+b3[0].y);
+  b4[2] = new PVector(.0111*spreadAngle*(b4[1].x-b4[0].x)+b4[0].x, .0111*spreadAngle*(b4[1].y-b4[0].y)+b4[0].y);
+  ctr[2] = new PVector(.0111*spreadAngle*(ctr[1].x-ctr[0].x)+ctr[0].x, .0111*spreadAngle*(ctr[1].y-ctr[0].y)+ctr[0].y);
+  t1[2] = new PVector(.0111*spreadAngle*(t1[1].x-t1[0].x)+t1[0].x, .0111*spreadAngle*(t1[1].y-t1[0].y)+t1[0].y);
+  t2[2] = new PVector(.0111*spreadAngle*(t2[1].x-t2[0].x)+t2[0].x, .0111*spreadAngle*(t2[1].y-t2[0].y)+t2[0].y);
 }
 
 void initPoints() {
   h = allBones[1].far;
   m1[0] = new PVector(590, 410);
   m1[1] = new PVector(625, 400);
+  m1[2] = new PVector(625, 400);
   m2[0] = new PVector(595, 400);
   m2[1] = new PVector(650, 325);
+  m2[2] = new PVector(650, 325);
   m3[0] = new PVector(590, 440); 
   m3[1] = new PVector(900, 250);
+  m3[2] = new PVector(900, 250);
   wt1[0] = new PVector(590, 400);
   wt1[1] = new PVector(975, 110);
+  wt1[2] = new PVector(975, 110);
   wt2[0] = new PVector(580, 500);
   wt2[1] = new PVector(1050, 100);
+  wt2[2] = new PVector(1050, 100);
   b1[0] = new PVector(580, 450);
   b1[1] = new PVector(630, 450);
+  b1[2] = new PVector(630, 450);
   b2[0] = new PVector(590, 450);
   b2[1] = new PVector(680, 375);
+  b2[2] = new PVector(680, 375);
   b3[0] = new PVector(560, 505);
   b3[1] = new PVector(1000, 300);
+  b3[2] = new PVector(1000, 300);
   b4[0] = new PVector(570, 505);
   b4[1] = new PVector(1025, 225);
+  b4[2] = new PVector(1025, 225);
   ctr[0] = new PVector(550, 425);
   ctr[1] = new PVector(550, 425);
+  ctr[2] = new PVector(550, 425);
   t1[0] = new PVector(560, 650);
   t1[1] = new PVector(575, 650);
+  t1[2] = new PVector(575, 650);
   t2[0] = new PVector(610, 640);
   t2[1] = new PVector(675, 600);
+  t2[2] = new PVector(675, 600);
 }
 
 void initBones() {
@@ -158,7 +198,6 @@ void checkPositions() {
   if (bigAngle > 8) {bigAngle = 8;}
   if ((newAngle) < -0.25) {newAngle = -0.25;}
   if ((newAngle) > 2) {newAngle = 2;}
-//  text((newAngle), 900, 575);
 //float bigAngle2 = ;
   allBones[0].far.x = int((cos(bigAngle) * allBones[1].boneLength)) + allBones[0].near.x;
   allBones[0].far.y = int((sin(bigAngle) * allBones[1].boneLength)) + allBones[0].near.y;
