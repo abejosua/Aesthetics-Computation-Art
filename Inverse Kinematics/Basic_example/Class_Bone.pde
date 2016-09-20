@@ -3,23 +3,12 @@ class Bone {
   float boneLength;
   PVector near;
   PVector far;
-  float xFactor;
-  float yFactor;
-  float cwLimit;
-  float ccwLimit;
-  float cwPosit;
-  float ccwPosit;
   Feather allFeathers[] = new Feather[numberOfFeathers];
 
   Bone (float boneLength, PVector near, PVector far) {
     this.boneLength = boneLength;
     this.near = near;
     this.far = far;
-    this.xFactor = 0;
-    this.yFactor = 0;
-    this.boneLength = boneLength;
-    this.cwLimit = PI;
-    this.ccwLimit = PI;
   }
 
 void display (){
@@ -41,8 +30,6 @@ void addFeathers(int numberOfFeathers) {
   for (int i = 0; i < numberOfFeathers; i++) {
     newPosit = new PVector((allBones[i].far.x - allBones[1].near.x), (allBones[i].far.y - allBones[1].near.y));    
     newAngle = atan2(newPosit.y, newPosit.x);
-
-
     frontPoint = new PVector (((allBones[i].boneLength / numberOfFeathers) * cos(newAngle)), 
     (allBones[i].boneLength / numberOfFeathers) * sin(newAngle));
     backPoint = new PVector (((allBones[i].boneLength / numberOfFeathers) * cos(newAngle + HALF_PI)), 
