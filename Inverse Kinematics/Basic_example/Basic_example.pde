@@ -21,34 +21,41 @@ PVector t1[] = new PVector[3];
 PVector t2[] = new PVector[3];
 float reach = 0;
 float jointDiam = 10;
-float boneLengths[] = {100, 175};
+float boneLengths[] = {
+  100, 175
+};
 float spreadAngle;
 
 void setup () {
   size(1100, 700);
-  anchorPoint = new PVector (width/2 + width/10, height/4);
+  anchorPoint = new PVector (width/2 + width/15, height/4);
   ellipseMode(CENTER);
   initBones();
   initPoints();
 }
 
 void draw () {
-  background(125, 200, 225);
+  background(125, 250, 250);
   stroke(jointColor);
   strokeWeight(1);
   checkPositions();
-  for (int i = 0; i < numberOfBones; i ++) {
-    allBones[i].display();
-  }
+//  for (int i = 0; i < numberOfBones; i ++) {
+//    allBones[i].display();
+//  }
   resetPoints();
-  drawKeyPoints();
+//  drawKeyPoints();
+  drawFeatherFields();
   mirrorImage();
   spreadAngle = degrees(atan2(int(100-allBones[1].far.y), int(600-allBones[1].far.x)))+180;
-  if (spreadAngle > 180) {spreadAngle = 0;}
-  if ((spreadAngle < 180) && (spreadAngle > 90)) {spreadAngle = 90;}
+  if (spreadAngle > 180) {
+    spreadAngle = 0;
+  }
+  if ((spreadAngle < 180) && (spreadAngle > 90)) {
+    spreadAngle = 90;
+  }
   spreadAngle = map(spreadAngle, 0, 90, 90, 0);
   text(spreadAngle, 900, 650);
-  text(mouseX+"  "+mouseY, 900,600);
+  text(mouseX+"  "+mouseY, 900, 600);
 }
 
 void mirrorImage() {  
@@ -61,9 +68,40 @@ void mirrorImage() {
   updatePixels();
 }
 
-void drawKeyPoints() {
+void drawFeatherFields() {
+  noStroke();
+  fill(25, 150, 150, 45);
+  quad(m1[0].x, m1[0].y, m2[2].x, m2[2].y, allBones[0].near.x, allBones[0].near.y, allBones[0].near.x, allBones[0].near.y);
+  fill(35, 150, 150, 45);
+  quad(m1[0].x, m1[0].y, m2[2].x, m2[2].y, b2[2].x, b2[2].y, b1[2].x, b1[2].y);
+  fill(45, 150, 150, 45);
+  quad(m2[0].x, m2[0].y, m3[2].x, m3[2].y, b3[2].x, b3[2].y, m1[0].x, m1[0].y);
+  fill(55, 150, 150, 45);
+  quad(allBones[0].near.x, allBones[0].near.y, allBones[0].far.x, allBones[0].far.y, m3[2].x, m3[2].y, m1[2].x, m1[2].y);
+  fill(65, 150, 150, 45);
+  quad(allBones[1].near.x, allBones[1].near.y, allBones[1].far.x, allBones[1].far.y, b3[2].x, b3[2].y, m3[2].x, m3[2].y);
+  fill(75, 150, 150, 45);
+  quad(m3[2].x, m3[2].y, allBones[1].far.x, allBones[1].far.y, wt1[2].x, wt1[2].y, b3[2].x, b3[2].y);
+  fill(85, 150, 150, 45);
+  quad(allBones[1].near.x, allBones[1].near.y, wt1[2].x, wt1[2].y, m3[2].x, m3[2].y, allBones[1].near.x, allBones[1].near.y);
+  fill(95, 150, 150, 45);
+  quad(wt1[2].x, wt1[2].y, wt2[2].x, wt2[2].y, b4[2].x, b4[2].y, b3[2].x, b3[2].y);
+  fill(105, 150, 150, 45);
+  quad(ctr[2].x, ctr[2].y, t1[2].x, t1[2].y, t1[0].x, t1[0].y, ctr[2].x, ctr[2].y);
+  fill(115, 150, 150, 45);
+  quad(ctr[2].x, ctr[2].y, t2[2].x, t2[2].y, t1[2].x, t1[2].y, ctr[2].x, ctr[2].y);
+  fill(125, 150, 150, 45);
+  quad(ctr[2].x, ctr[2].y, t1[2].x, t1[2].y, 550, 650, ctr[2].x, ctr[2].y);
+  fill(135, 150, 150, 45);
+  quad(550, 50, 590, 100, ctr[2].x, ctr[2].y, 550, 50);
+  fill(145, 150, 150, 45);
+  quad(550, 100, allBones[0].near.x, allBones[0].near.y, 550, 150, 550, 100);
+  fill(155, 150, 150, 45);
+  quad(550, 150, allBones[0].near.x, allBones[0].near.y, wt2[0].x, wt2[0].y, 550, 100);
+}
 
-fill(125);
+void drawKeyPoints() {
+  fill(125);
   ellipse(m1[2].x, m1[2].y, 10, 10);
   ellipse(m2[2].x, m2[2].y, 10, 10);
   ellipse(m3[2].x, m3[2].y, 10, 10);
@@ -76,21 +114,21 @@ fill(125);
   ellipse(ctr[2].x, ctr[2].y, 10, 10);
   ellipse(t1[2].x, t1[2].y, 10, 10);
   ellipse(t2[2].x, t2[2].y, 10, 10);
-/*
+  /*
   fill(125, 0, 0);
-  ellipse(m1[1].x, m1[1].y, 3, 3);
-  ellipse(m2[1].x, m2[1].y, 3, 3);
-  ellipse(m3[1].x, m3[1].y, 3, 3);
-  ellipse(wt1[1].x, wt1[1].y, 3, 3);
-  ellipse(wt2[1].x, wt2[1].y, 3, 3);
-  ellipse(b1[1].x, b1[1].y, 3, 3);
-  ellipse(b2[1].x, b2[1].y, 3, 3);
-  ellipse(b3[1].x, b3[1].y, 3, 3);
-  ellipse(b4[1].x, b4[1].y, 3, 3);
-  ellipse(ctr[1].x, ctr[1].y, 3, 3);
-  ellipse(t1[1].x, t1[1].y, 3, 3);
-  ellipse(t2[1].x, t2[1].y, 3, 3);
-  */
+   ellipse(m1[1].x, m1[1].y, 3, 3);
+   ellipse(m2[1].x, m2[1].y, 3, 3);
+   ellipse(m3[1].x, m3[1].y, 3, 3);
+   ellipse(wt1[1].x, wt1[1].y, 3, 3);
+   ellipse(wt2[1].x, wt2[1].y, 3, 3);
+   ellipse(b1[1].x, b1[1].y, 3, 3);
+   ellipse(b2[1].x, b2[1].y, 3, 3);
+   ellipse(b3[1].x, b3[1].y, 3, 3);
+   ellipse(b4[1].x, b4[1].y, 3, 3);
+   ellipse(ctr[1].x, ctr[1].y, 3, 3);
+   ellipse(t1[1].x, t1[1].y, 3, 3);
+   ellipse(t2[1].x, t2[1].y, 3, 3);
+   */
   line(m1[0].x, m1[0].y, m1[1].x, m1[1].y);
   line(m2[0].x, m2[0].y, m2[1].x, m2[1].y);
   line(m3[0].x, m3[0].y, m3[1].x, m3[1].y);
@@ -149,9 +187,9 @@ void initPoints() {
   b4[0] = new PVector(570, 505);
   b4[1] = new PVector(1025, 225);
   b4[2] = new PVector(1025, 225);
-  ctr[0] = new PVector(550, 425);
-  ctr[1] = new PVector(550, 425);
-  ctr[2] = new PVector(550, 425);
+  ctr[0] = new PVector(550, 325);
+  ctr[1] = new PVector(550, 325);
+  ctr[2] = new PVector(550, 325);
   t1[0] = new PVector(560, 650);
   t1[1] = new PVector(575, 650);
   t1[2] = new PVector(575, 650);
@@ -179,34 +217,41 @@ void initBones() {
 
 void checkPositions() {
   PVector newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);
-//PVector newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);
-//PVector newPosit2 = new PVector(allBones[0].near.x - allBones[0].far.x, allBones[0].near.y - allBones[0].far);
+  //PVector newPosit = new PVector(mouseX - allBones[0].near.x, mouseY - allBones[0].near.y);
+  //PVector newPosit2 = new PVector(allBones[0].near.x - allBones[0].far.x, allBones[0].near.y - allBones[0].far);
   float totalDistance = sqrt(newPosit.x*newPosit.x+newPosit.y*newPosit.y);
-//float totalDistance2 = sqrt()
+  //float totalDistance2 = sqrt()
   float hypot = min(totalDistance, int(allBones[0].boneLength)+int(allBones[1].boneLength));
-//float hypot2 = min();
+  //float hypot2 = min();
   float ha = acos((int(allBones[0].boneLength)*int(allBones[0].boneLength)-int(allBones[1].boneLength)*int(allBones[1].boneLength)-hypot*hypot)/
-                 (-2*int(allBones[1].boneLength)*hypot));
-//float ha2=acos();
+    (-2*int(allBones[1].boneLength)*hypot));
+  //float ha2=acos();
   float ea = acos((hypot*hypot-int(allBones[0].boneLength)*int(allBones[0].boneLength)-int(allBones[1].boneLength)*int(allBones[1].boneLength))/
-                 (-2*int(allBones[1].boneLength)*int(allBones[0].boneLength)));
-//float ea2=acos();
+    (-2*int(allBones[1].boneLength)*int(allBones[0].boneLength)));
+  //float ea2=acos();
   float newAngle = atan2(int(newPosit.y), int(newPosit.x));
-//float newAngle2 = atan2();
+  //float newAngle2 = atan2();
   float bigAngle = newAngle + ha + PI + ea;
-  if (bigAngle < 5.9) {bigAngle = 5.9;}
-  if (bigAngle > 8) {bigAngle = 8;}
-  if ((newAngle) < -0.25) {newAngle = -0.25;}
-  if ((newAngle) > 2) {newAngle = 2;}
-//float bigAngle2 = ;
+  if (bigAngle < 5.9) {
+    bigAngle = 5.9;
+  }
+  if (bigAngle > 8) {
+    bigAngle = 8;
+  }
+  if ((newAngle) < -0.25) {
+    newAngle = -0.25;
+  }
+  if ((newAngle) > 2) {
+    newAngle = 2;
+  }
+  //float bigAngle2 = ;
   allBones[0].far.x = int((cos(bigAngle) * allBones[1].boneLength)) + allBones[0].near.x;
   allBones[0].far.y = int((sin(bigAngle) * allBones[1].boneLength)) + allBones[0].near.y;
   allBones[1].near = allBones[0].far;
   allBones[1].far.x = int((cos(newAngle+ha) * allBones[0].boneLength)) + allBones[0].far.x;
   allBones[1].far.y = int((sin(newAngle+ha) * allBones[0].boneLength)) + allBones[0].far.y;
-//allBones[2].near = ;
-//allBones[2].far.x = ;
-//allBones[2].far.y = ;
+  //allBones[2].near = ;
+  //allBones[2].far.x = ;
+  //allBones[2].far.y = ;
 }
-
 
