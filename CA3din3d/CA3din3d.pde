@@ -44,7 +44,7 @@ cam.setMaximumDistance(1000);
 
 void draw() {
   background(125);
-  translate(-width/5 -height/5, -50);  / position for better viewing
+  translate(-width/5 -height/5, -50);  // position for better viewing
   stroke(255);
 //displayRefLines();
   fill(250, 0, 0, 50);
