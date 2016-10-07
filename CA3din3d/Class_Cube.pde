@@ -27,13 +27,5 @@ class Cube {
         }
   }
   
-  private void getNeighborhood() {
-    //if (x <= 0) {this.neighborhood[0] = 0;} else {
-    this.neighborhood[0] = matrix[this.x - 1][this.y][this.z].state;//}
-    this.neighborhood[1] = this.state;
-    //if (x >= (gridX - 1)) {this.neighborhood[2] = 0;} else {
-    this.neighborhood[2] = matrix[this.x + 1][this.y][this.z].state;//}
-
-  }
 }
 
