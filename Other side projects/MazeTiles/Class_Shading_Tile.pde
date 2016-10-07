@@ -1,4 +1,4 @@
-class Tile {
+class Shading_Tile {
   int type;
   float w = 10;
   float h = 10;
@@ -7,7 +7,7 @@ class Tile {
   color BGC = color(45, 125, 200, 75);
   color markColor = color(100, 250, 250, 50);
 
-  Tile() {
+  Shading_Tile() {
     this.type = 15;
     this.w = 10;
     this.h = 10;
@@ -15,7 +15,7 @@ class Tile {
     this.y = 5;
   }
 
-  Tile(int type, float x, float y, float w, float h, color BGC, color markColor) {
+  Shading_Tile(int type, float x, float y, float w, float h, color BGC, color markColor) {
     this.type = type;
     this.x = x;
     this.y = y;
@@ -37,8 +37,17 @@ class Tile {
     fill(this.BGC);
     rect(this.x, this.y, this.w, this.h);
     stroke(this.markColor);
-    strokeWeight(int(random(s)) + 3);
+//    strokeWeight(int(random(s)) + 3);
+  strokeWeight(1);
     noFill();
+    float eW = (this.w / 4) * 0.25 * ceil(this.type / 4);
+float eH = (this.h / 4) * 0.25 * ceil(this.type / 4);
+for (float i = 0; i < 1; i = i + 0.25) {
+  for (float j = 0; j < 1; j = j + 0.25) {
+    ellipse(this.x + (i * this.w), this.y + (j * this.h), eW, eH);
+  }
+}
+/*
     switch (this.type) {
     case 0: 
     {
@@ -171,6 +180,9 @@ class Tile {
       break;
     }
     }
+    */
   }
+  
 }
+
 

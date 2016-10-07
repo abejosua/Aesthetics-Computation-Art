@@ -4,74 +4,154 @@ int printCount = 1;
 
 int tileCountX;// = 70;
 int tileCountY;// = 70;
-float tileW = 15;
-float tileH = 15;
+float tileW = 50;
+float tileH = 50;
 float numberOfTiles;
-color tileBGColor = color(255);
-color tileMarkColor = color(0);
-Tile allTiles[][]; // = new Tile[int(tileCountY)][int(tileCountX)];
+color tileBGColor = color(125);
+color tileMarkColor = color(50);
+
+//-------------------------------------------------------------------------------------------
+//Tile allTiles[][]; // = new Tile[int(tileCountY)][int(tileCountX)];
+//Wide_Tile allTiles[][];
+//Five_Line_Tile allTiles[][];
+//Curve_Tile allTiles[][];
+Shading_Tile allTiles[][];
+
 int strokeFluct = 1;
 int strokeDir = -1;
 int s = 1;
 
+int composeX = 0;
+int composeY = 0;
+int composeWhich = 0;
+boolean composeMode = false;
+
+int[] leftColumn = {
+  0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14, 14
+};
+int[] topRow = {
+  0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7
+};
+int[] rightColumn = {
+  0, 1, 2, 3, 0, 1, 2, 3, 8, 9, 10, 11, 8, 9, 10, 11
+};
+int[] bottomRow = {
+  0, 1, 0, 1, 4, 5, 4, 5, 8, 9, 8, 9, 12, 13, 12, 13
+};
+/*
+int[] upperLeft = {0 ,0, 2, 2, 4, 4, 6, 6, 0, 0, 2, 2, 4, 4, 6, 6};
+ int[] upperRight = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3};
+ int[] LowerRight = {0, 1, 0, 1, 0, 1, 0, 1, 8, 9, 8, 9, 8, 9, 8, 9};
+ int[] LowerLeft = {0, 0, 0, 0, 4, 4, 4, 4, 8, 8, 8, 8, 12, 12, 12, 12};
+ */
+
 void setup() {
-  size(480, 480);
+  size(600, 600);
   tileCountX = int(width / tileW);
   tileCountY = int(height / tileH);  
-  allTiles = new Tile[int(tileCountX)][int(tileCountY)];
+
+//----------------------------------------------------------------------------------------
+//  allTiles = new Tile[int(tileCountX)][int(tileCountY)];
+//  allTiles = new Wide_Tile[int(tileCountX)][int(tileCountY)];
+// allTiles = new Five_Line_Tile[int(tileCountX)][int(tileCountY)];
+//allTiles = new Curve_Tile[int(tileCountX)][int(tileCountY)];
+allTiles = new Shading_Tile[int(tileCountX)][int(tileCountY)];
+
   numberOfTiles = tileCountY * tileCountX;
   initTiles();
-//  noLoop();
+  //  noLoop();
 }
 
 void draw() {
-/*  strokeWeight(strokeFluct);
-  if (frameCount % 50 == 0) {
-  strokeFluct = strokeFluct + strokeDir;
-  if (strokeFluct == 0) {strokeDir = 1;}
-  if (strokeFluct == 5) {strokeDir = -1;}
-}
-*/
-  
-    if (snapShot) {
+
+  if (snapShot) {
     // Note that #### will be replaced with the frame number. Fancy!
     beginRecord(PDF, "print-"+printCount+".pdf");
-   printCount = printCount + 1; 
+    printCount = printCount + 1;
   }
-  
+
   background(125);
   for (int i = 0; i < tileCountX; i ++) {
     for (int j = 0; j < tileCountY; j ++) {
       allTiles[i][j].display();
     }
   }
+
   //  allTiles[5][10].BGC = color(0, 0, 125);
   //  allTiles[5][10].display();
   //  for (int i = 0; i < tileCountX; i ++) {allTiles[0][i].type = 6; allTiles[0][i].display();}
-  
-    if (snapShot) {
-    endRecord();
-  snapShot = false;
+  if (composeMode == true) {
+    fill(125, 0, 0, 150);
+    text("Compose Mode ON: toggle with c :: arrows select :: q/a change tile :: b blank", 25, 25);
+    allTiles[composeX][composeY].type = composeWhich;
+    stroke(125, 0, 0);
+    noFill();
+    rect(allTiles[composeX][composeY].x, allTiles[composeX][composeY].y, tileH, tileW);
   }
 
-  
-  
+  if (snapShot) {
+    endRecord();
+    snapShot = false;
+  }
 }
 
 void keyPressed() {
-  if (keyCode == UP) {
-  s = s + 1;
-  if (s > 75) {s = 75;}
+  if ((key == 'c') || (key == 'C')) {
+    composeMode = !(composeMode);
+    composeWhich = allTiles[composeX][composeY].type;
   }
-  if (keyCode == DOWN) {
-  s = s - 1;
-  if (s < 1) {s = 1;}
-  }
-  if ((key == 'i') || (key == 'I')) {
-    initTiles();
-  }
-  if ((key == 's') || (key == 'S')) {
-    snapShot = true;
+  if (composeMode == true) {
+    if (keyCode == UP) {
+      if (composeY > 0) {
+        composeY = composeY - 1;
+        composeWhich = allTiles[composeX][composeY].type;
+      }
+    }
+    if (keyCode == DOWN) {
+      if (composeY < tileCountY-1) {
+        composeY = composeY + 1;
+        composeWhich = allTiles[composeX][composeY].type;
+      }
+    }
+    if (keyCode == LEFT) {
+      if (composeX > 0) {
+        composeX = composeX - 1;
+        composeWhich = allTiles[composeX][composeY].type;
+      }
+    }
+    if (keyCode == RIGHT) {
+      if (composeX < tileCountX-1) {
+        composeX = composeX + 1;
+        composeWhich = allTiles[composeX][composeY].type;
+      }
+    }
+    if ((key == 'q') || (key == 'Q')) {
+      composeWhich = composeWhich + 1;
+      if (composeWhich > 15) {
+        composeWhich = 0;
+      }
+    }
+    if ((key == 'a') || (key == 'A')) {
+      composeWhich = composeWhich - 1;
+      if (composeWhich < 0) {
+        composeWhich = 15;
+      }
+    }
+    if ((key == 'b') || (key == 'B')) {
+      for (int i = 0; i < tileCountX; i ++) {
+        for (int j = 0; j < tileCountY; j ++) {
+          allTiles[i][j].type = 0;
+        }
+      }
+      composeWhich = 0;
+    }
+  } else {
+    if ((key == 'i') || (key == 'I')) {
+      initTiles();
+    }
+    if ((key == 's') || (key == 'S')) {
+      snapShot = true;
+    }
   }
 }
 
@@ -86,11 +166,37 @@ void initTiles() {
         newValue = int(random(16));
       }
       //      println("yes");
-      allTiles[i][j] = new Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+      
+//------------------------------------------------------------------------------------------------------------------
+//            allTiles[i][j] = new Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+//    allTiles[i][j] = new Wide_Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+//    allTiles[i][j] = new Five_Line_Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+//allTiles[i][j] = new Curve_Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+allTiles[i][j] = new Shading_Tile(newValue, i * tileW, j * tileH, tileW, tileH, tileBGColor, tileMarkColor);
+
       total++;
       //     print("Produced tile #" + (total) + ".  Value is ");
       //     println(allTiles[j][i].type);
     }
+  }
+  fixEdges();
+  
+/*  
+  for (int i = 0; i < 16; i ++) {
+    allTiles[i][1].type = i;
+  }
+*/  
+  
+}
+
+void fixEdges() {
+  for (int i = 0; i < tileCountX; i ++) {// top and bottom rows
+    allTiles[i][0].type = topRow[allTiles[i][0].type];
+    allTiles[i][tileCountY - 1].type = bottomRow[allTiles[i][tileCountY - 1].type];
+  }  
+  for (int i = 0; i < tileCountY; i ++) {// left and right columns
+    allTiles[0][i].type = leftColumn[allTiles[0][i].type];
+    allTiles[tileCountX - 1][i].type = rightColumn[allTiles[tileCountX - 1][i].type];
   }
 }
 

@@ -25,6 +25,10 @@ float boneLengths[] = {
   100, 175
 };
 float spreadAngle;
+float gFactor = random(255);
+float bFactor = random(255);
+float gDir = 1;
+float bDir = 1;
 
 void setup () {
   size(1100, 700);
@@ -35,7 +39,7 @@ void setup () {
 }
 
 void draw () {
-  background(125, 250, 250);
+  background(50, bFactor, gFactor, 125);
   stroke(jointColor);
   strokeWeight(1);
   checkPositions();
@@ -54,8 +58,16 @@ void draw () {
     spreadAngle = 90;
   }
   spreadAngle = map(spreadAngle, 0, 90, 90, 0);
-  text(spreadAngle, 900, 650);
-  text(mouseX+"  "+mouseY, 900, 600);
+//  text(spreadAngle, 900, 650);
+//  text(mouseX+"  "+mouseY, 900, 600);
+fill(25, 25, 25, 225);
+text("OPEN", 1000, 50);
+text("CLOSE", 50, 650);
+gFactor = gFactor + random(2) * gDir;
+if ((gFactor > 255) || (gFactor < 0)) {gDir = gDir * -1;}
+bFactor = bFactor + random(2) * bDir;
+if ((bFactor > 255) || (bFactor < 0)) {bDir = bDir * -1;}
+
 }
 
 void mirrorImage() {  
@@ -70,33 +82,33 @@ void mirrorImage() {
 
 void drawFeatherFields() {
   noStroke();
-  fill(25, 150, 150, 45);
+  fill(15, gFactor, bFactor, 65);
   quad(m1[0].x, m1[0].y, m2[2].x, m2[2].y, allBones[0].near.x, allBones[0].near.y, allBones[0].near.x, allBones[0].near.y);
-  fill(35, 150, 150, 45);
+  fill(30, gFactor, bFactor, 65);
   quad(m1[0].x, m1[0].y, m2[2].x, m2[2].y, b2[2].x, b2[2].y, b1[2].x, b1[2].y);
-  fill(45, 150, 150, 45);
+  fill(45, gFactor, bFactor, 65);
   quad(m2[0].x, m2[0].y, m3[2].x, m3[2].y, b3[2].x, b3[2].y, m1[0].x, m1[0].y);
-  fill(55, 150, 150, 45);
+  fill(60, gFactor, bFactor, 65);
   quad(allBones[0].near.x, allBones[0].near.y, allBones[0].far.x, allBones[0].far.y, m3[2].x, m3[2].y, m1[2].x, m1[2].y);
-  fill(65, 150, 150, 45);
+  fill(75, gFactor, bFactor, 65);
   quad(allBones[1].near.x, allBones[1].near.y, allBones[1].far.x, allBones[1].far.y, b3[2].x, b3[2].y, m3[2].x, m3[2].y);
-  fill(75, 150, 150, 45);
+  fill(90, gFactor, bFactor, 65);
   quad(m3[2].x, m3[2].y, allBones[1].far.x, allBones[1].far.y, wt1[2].x, wt1[2].y, b3[2].x, b3[2].y);
-  fill(85, 150, 150, 45);
+  fill(105, gFactor, bFactor, 65);
   quad(allBones[1].near.x, allBones[1].near.y, wt1[2].x, wt1[2].y, m3[2].x, m3[2].y, allBones[1].near.x, allBones[1].near.y);
-  fill(95, 150, 150, 45);
+  fill(120, gFactor, bFactor, 65);
   quad(wt1[2].x, wt1[2].y, wt2[2].x, wt2[2].y, b4[2].x, b4[2].y, b3[2].x, b3[2].y);
-  fill(105, 150, 150, 45);
+  fill(135, gFactor, bFactor, 65);
   quad(ctr[2].x, ctr[2].y, t1[2].x, t1[2].y, t1[0].x, t1[0].y, ctr[2].x, ctr[2].y);
-  fill(115, 150, 150, 45);
+  fill(150, gFactor, bFactor, 65);
   quad(ctr[2].x, ctr[2].y, t2[2].x, t2[2].y, t1[2].x, t1[2].y, ctr[2].x, ctr[2].y);
-  fill(125, 150, 150, 45);
+  fill(165, gFactor, bFactor, 65);
   quad(ctr[2].x, ctr[2].y, t1[2].x, t1[2].y, 550, 650, ctr[2].x, ctr[2].y);
-  fill(135, 150, 150, 45);
+  fill(180, gFactor, bFactor, 65);
   quad(550, 50, 590, 100, ctr[2].x, ctr[2].y, 550, 50);
-  fill(145, 150, 150, 45);
+  fill(195, gFactor, bFactor, 65);
   quad(550, 100, allBones[0].near.x, allBones[0].near.y, 550, 150, 550, 100);
-  fill(155, 150, 150, 45);
+  fill(210, gFactor, bFactor, 65);
   quad(550, 150, allBones[0].near.x, allBones[0].near.y, wt2[0].x, wt2[0].y, 550, 100);
 }
 
