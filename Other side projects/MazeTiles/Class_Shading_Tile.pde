@@ -6,6 +6,7 @@ class Shading_Tile {
   float y;
   color BGC = color(45, 125, 200, 75);
   color markColor = color(100, 250, 250, 50);
+  float r[] = new float [256];
 
   Shading_Tile() {
     this.type = 15;
@@ -23,6 +24,9 @@ class Shading_Tile {
     this.h = h;
     this. BGC = BGC;
     this.markColor = markColor;
+    for (int i = 0; i < 256; i ++ ) {
+      r[i] = random(0.25);
+    }
   }
 
   void display() {
@@ -34,19 +38,41 @@ class Shading_Tile {
     noStroke();
 //    stroke(125,0,0);
 //    strokeWeight(1);
-    fill(this.BGC);
-    rect(this.x, this.y, this.w, this.h);
+
+//    fill(this.BGC);
+//    rect(this.x, this.y, this.w, this.h);
     stroke(this.markColor);
+
 //    strokeWeight(int(random(s)) + 3);
   strokeWeight(1);
     noFill();
-    float eW = (this.w / 4) * 0.25 * ceil(this.type / 4);
-float eH = (this.h / 4) * 0.25 * ceil(this.type / 4);
-for (float i = 0; i < 1; i = i + 0.25) {
+//fill(0);
+//ellipseMode(CORNER);
+
+float eW = ((0.3 * this.w)/1.5);
+float eH = ((0.3 * this.h)/1.5);
+
+int count = 0;
+for (int h = 0; h < this.type / 2; h ++) {
+for (float i = 0; i < 1; i = i = i + 0.25) {
   for (float j = 0; j < 1; j = j + 0.25) {
-    ellipse(this.x + (i * this.w), this.y + (j * this.h), eW, eH);
+    rect(this.x + (i * this.w)+(r[count]*this.w), this.y + (j * this.h)+(r[count]*this.h), eW, eH, 5);
+    count = count + 1;
   }
 }
+}
+/*
+
+    float eW = ((0.25 * this.w) / 16) * this.type;
+float eH = ((0.25 * this.h) / 16) * this.type;
+int count = 0;
+for (float i = 0; i < 1; i = i = i + 0.25) {
+  for (float j = 0; j < 1; j = j + 0.25) {
+    rect(this.x + (i * this.w)+(r[count]*this.w), this.y + (j * this.h)+(r[count]*this.h), eW, eH, 7);
+    count = count + 1;
+  }
+}
+*/
 /*
     switch (this.type) {
     case 0: 
@@ -181,8 +207,12 @@ for (float i = 0; i < 1; i = i + 0.25) {
     }
     }
     */
+//    fill(125, 0, 0);
+//    text (type, this.x + this.w*0.4, this.y + this.h*0.4);
+
+
   }
-  
+
 }
 
 

@@ -4,12 +4,13 @@ int printCount = 1;
 
 int tileCountX;// = 70;
 int tileCountY;// = 70;
-float tileW = 50;
-float tileH = 50;
+float tileW = 150;
+float tileH = 100;
 float numberOfTiles;
 color tileBGColor = color(125);
 color tileMarkColor = color(50);
 
+PImage p;
 //-------------------------------------------------------------------------------------------
 //Tile allTiles[][]; // = new Tile[int(tileCountY)][int(tileCountX)];
 //Wide_Tile allTiles[][];
@@ -46,7 +47,13 @@ int[] upperLeft = {0 ,0, 2, 2, 4, 4, 6, 6, 0, 0, 2, 2, 4, 4, 6, 6};
  */
 
 void setup() {
-  size(600, 600);
+  size(1100, 800);
+  
+p = loadImage("My Eye.jpg");
+image(p, 0 , 0);
+p.loadPixels();
+
+
   tileCountX = int(width / tileW);
   tileCountY = int(height / tileH);  
 
@@ -59,7 +66,7 @@ allTiles = new Shading_Tile[int(tileCountX)][int(tileCountY)];
 
   numberOfTiles = tileCountY * tileCountX;
   initTiles();
-  //  noLoop();
+   // noLoop();
 }
 
 void draw() {
@@ -71,6 +78,8 @@ void draw() {
   }
 
   background(125);
+  p.updatePixels();
+//  image(p, 0 ,0);
   for (int i = 0; i < tileCountX; i ++) {
     for (int j = 0; j < tileCountY; j ++) {
       allTiles[i][j].display();
@@ -181,8 +190,8 @@ allTiles[i][j] = new Shading_Tile(newValue, i * tileW, j * tileH, tileW, tileH, 
   }
   fixEdges();
   
-/*  
-  for (int i = 0; i < 16; i ++) {
+/*
+for (int i = 0; i < 16; i ++) {
     allTiles[i][1].type = i;
   }
 */  
